@@ -64,6 +64,7 @@ collections:
           - { label: "Xe C\u1ea9u", value: "xe-cau" }
           - { label: "S\u01a1 Mi R\u01a1 Mooc", value: "mooc" }
           - { label: "Xe \u0110\u1ea7u K\u00e9o", value: "dau-keo" }
+          - { label: "Xe Lu", value: "xe-lu" }
 
       # Pricing
       - { label: "Gi\u00e1 (VN\u0110)", name: "price", widget: "number", required: false }

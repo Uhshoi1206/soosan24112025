@@ -1,126 +1,145 @@
 # Quick CMS Reference
 
-## ⚡ Quick Start
+## Truy Cập CMS
 
-### 1. Update GitHub Repo Info
-Edit `public/loivao/config.yml`:
-```yaml
-backend:
-  name: github
-  repo: YOUR-USERNAME/YOUR-REPO-NAME  # ← Change this
-  branch: main
+- **Local**: `http://localhost:4321/loivao`
+- **Production**: `https://soosan24112025.netlify.app/loivao`
+
+## 3 Collections
+
+### 1. Danh Mục (Categories)
+- File location: `src/content/categories/`
+- Format: JSON
+- Slug: `{{slug}}.json`
+
+**Sau khi tạo category mới**, cần update 2 files:
+1. `src/config/categoryVisibility.ts`
+2. `public/loivao/config.yml`
+
+→ Xem chi tiết: `QUICK_START.md`
+
+### 2. Sản Phẩm (Products)
+- File location: `src/content/products/`
+- Format: JSON
+- Slug: `{{id}}.json`
+- Current: 43 products
+
+**Loại xe available**:
+- xe-tai (Xe Tải)
+- xe-cau (Xe Cẩu)
+- mooc (Sơ Mi Rơ Mooc)
+- dau-keo (Xe Đầu Kéo)
+- xe-lu (Xe Lu)
+
+### 3. Bài Viết (Blog)
+- File location: `src/content/blog/`
+- Format: Markdown with frontmatter
+- Slug: `{{slug}}.md`
+- Current: 26 posts
+
+**Categories available**:
+- industry-news (Tin Tức Ngành)
+- product-review (Đánh Giá Xe)
+- driver-tips (Kinh Nghiệm Lái Xe)
+- maintenance (Bảo Dưỡng)
+- buying-guide (Tư Vấn Mua Xe)
+- technology (Công Nghệ & Đổi Mới)
+
+## Workflow
+
+```
+1. CMS Edit → 2. Git Commit → 3. Netlify Build → 4. Live Update
 ```
 
-### 2. Setup GitHub OAuth
-1. Go to: https://github.com/settings/developers
-2. Create New OAuth App
-3. Set callback URL: `https://api.netlify.com/auth/done`
-4. Copy Client ID & Secret
+## Important Fields
 
-### 3. Configure Netlify
-1. Netlify Dashboard → Site settings → Access control → OAuth
-2. Install GitHub provider
-3. Enter Client ID & Secret
+### Products
+- `id`: Unique identifier (slug format)
+- `type`: MUST match categories
+- `isHidden`: Toggle visibility
+- `isNew`: Show "Mới" badge
+- `isHot`: Show "Hot" badge
 
-### 4. Access CMS
-URL: `https://your-domain.com/loivao` (NOT `/admin`)
+### Blog Posts
+- `slug`: URL path
+- `publishDate`: Unix timestamp
+- `isHidden`: Toggle visibility
 
-## 📊 Content Structure
+### Categories
+- `id`: MUST match `slug`
+- `isHidden`: Toggle visibility
+- `order`: CMS sorting only (not website)
 
-### Content Collections
-- **Products**: `src/content/products/*.json` (43 files)
-- **Blog Posts**: `src/content/blog/*.md` (26 files)
-- **Categories**: `src/content/categories/*.json` (4 files)
-
-### Visibility Control
-All collections have `isHidden: boolean` field:
-- `isHidden: false` → Content visible on website
-- `isHidden: true` → Content hidden from website
-
-## 🔧 Common Tasks
-
-### Hide/Show Content
-1. Open item in CMS
-2. Toggle "Ẩn" switch
-3. Save
+## Common Tasks
 
 ### Add New Product
-1. Click "New Sản Phẩm"
-2. Fill required fields:
-   - ID, name, slug, brand
-   - Weight, dimensions
-   - Images (upload or URL)
-3. Set `isHidden: false`
+1. CMS → Sản Phẩm → New
+2. Fill required fields
+3. Save → Auto commit
+
+### Edit Product
+1. CMS → Sản Phẩm → Select item
+2. Edit fields
+3. Save → Auto commit
+
+### Hide Product
+1. Select product
+2. Toggle "Ẩn" = true
+3. Save
+
+### Add Blog Post
+1. CMS → Bài Viết → New
+2. Write in markdown editor
+3. Add images
 4. Save
 
-### Add New Blog Post
-1. Click "New Bài Viết"
-2. Fill frontmatter fields
-3. Write content in Markdown
-4. Set `isHidden: false`
-5. Save
+## Tips
 
-## 📁 File Locations
+### Images
+- Auto upload to: `public/assets/uploads/`
+- Use relative URLs: `/assets/uploads/filename.jpg`
 
-```
-project/
-├── public/
-│   └── loivao/              # CMS Admin
-│       ├── index.html       # CMS entry point
-│       └── config.yml       # CMS configuration
-├── src/
-│   ├── content/             # All content here
-│   │   ├── config.ts        # Schema definitions
-│   │   ├── categories/      # Category data
-│   │   ├── products/        # Product data
-│   │   └── blog/            # Blog posts
-│   └── utils/
-│       └── contentCollections.ts  # Helper functions
-└── CMS_SETUP_GUIDE.md       # Full documentation
+### Markdown Syntax
+```markdown
+# Heading 1
+## Heading 2
+**bold** *italic*
+[link](url)
+![image](/assets/uploads/img.jpg)
 ```
 
-## 🚨 Important Notes
+### Product Images
+- Add multiple images via "Ảnh Sản Phẩm" list
+- First image = thumbnail if no thumbnailUrl
 
-1. **CMS Path**: Use `/loivao`, NOT `/admin`
-2. **Local Development**: CMS won't work locally (needs GitHub OAuth)
-3. **Direct File Edit**: For local changes, edit files in `src/content/` directly
-4. **Migration Files**: Don't delete old data files yet - verify production first
-5. **Build Command**: Always run `npm run build` after major changes
+## Troubleshooting
 
-## 🔗 Useful Commands
+### Can't Login
+→ Check `NETLIFY_OAUTH_SETUP.md`
 
-```bash
-# Development
-npm run dev
+### Changes Not Showing
+→ Wait 2-3 mins for Netlify build
 
-# Build (always do this before deploy)
-npm run build
+### Error After Save
+→ Check Git commit log
+→ Verify file format
 
-# Preview build
-npm run preview
+## Files Modified by CMS
+
+```
+src/content/
+├── categories/*.json    ← Category edits
+├── products/*.json      ← Product edits
+└── blog/*.md           ← Blog post edits
+
+public/assets/uploads/  ← Image uploads
 ```
 
-## ✅ Migration Summary
+## Notes
 
-**Completed:**
-- ✅ 43 products migrated to JSON
-- ✅ 26 blog posts migrated to Markdown
-- ✅ 4 categories created
-- ✅ Sveltia CMS configured at `/loivao`
-- ✅ Content Collections schema defined
-- ✅ Frontend refactored to use `getCollection()`
-- ✅ Visibility logic integrated with `isHidden` field
-- ✅ Build successful (9.6MB output)
-
-**Next Steps:**
-1. Update `config.yml` with your GitHub repo
-2. Setup GitHub OAuth App
-3. Configure Netlify OAuth
-4. Deploy to Netlify
-5. Access CMS at `/loivao`
-6. Test adding/editing content
-7. After verification, clean up old data files
-
-## 📖 Full Documentation
-
-See `CMS_SETUP_GUIDE.md` for complete setup instructions and troubleshooting.
+- All changes create Git commits
+- Commits include user email
+- Full audit trail in Git history
+- Can rollback via Git
+- No database needed
+- All content in GitHub

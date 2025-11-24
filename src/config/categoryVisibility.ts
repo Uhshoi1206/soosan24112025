@@ -36,6 +36,12 @@ export const categories: CategoryConfig[] = [
     name: 'Xe Đầu Kéo',
     enabled: true,
     keywords: ['đầu kéo','tractor','kéo','xe đầu kéo']
+  },
+  {
+    key: 'xe-lu',
+    name: 'Xe Lu',
+    enabled: true,
+    keywords: ['xe lu','road roller','lu','compactor','đầm nén','lu rung']
   }
 ];
 
