@@ -1,0 +1,370 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const categories = await getCollection('categories');
+const products = await getCollection('products');
+const blogPosts = await getCollection('blog');
+
+const categoriesData = categories.map(cat => ({
+  id: cat.data.id,
+  slug: cat.slug,
+  name: cat.data.name,
+  isHidden: cat.data.isHidden || false,
+  order: cat.data.order || 999
+})).sort((a, b) => a.order - b.order);
+
+const productsData = products.map(prod => ({
+  id: prod.data.id,
+  slug: prod.slug,
+  name: prod.data.name,
+  brand: prod.data.brand,
+  type: prod.data.type,
+  isHidden: prod.data.isHidden || false,
+  isNew: prod.data.isNew || false,
+  isHot: prod.data.isHot || false,
+  order: prod.data.order || 999
+})).sort((a, b) => a.order - b.order);
+
+const blogData = blogPosts.map(post => ({
+  id: post.data.id,
+  slug: post.slug,
+  title: post.data.title,
+  category: post.data.category,
+  views: post.data.views || 0,
+  comments: post.data.comments || 0,
+  isHidden: post.data.isHidden || false,
+  order: post.data.order || 999
+})).sort((a, b) => a.order - b.order);
+---
+
+<BaseLayout title="Admin Dashboard - Quản Trị Nội Dung">
+  <div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8">
+    <div class="container mx-auto px-4 max-w-7xl">
+      <div class="mb-8 flex items-center justify-between">
+        <div>
+          <h1 class="text-4xl font-bold text-slate-900 mb-2">Admin Dashboard</h1>
+          <p class="text-slate-600">Quản lý trạng thái hiển thị nội dung</p>
+        </div>
+        <a
+          href="/loivao/"
+          class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl"
+        >
+          CMS Editor
+        </a>
+      </div>
+
+      <div class="grid gap-6">
+        <!-- Categories Section -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200">
+          <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
+            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+              </svg>
+              Danh Mục ({categoriesData.length})
+            </h2>
+          </div>
+          <div class="p-6">
+            <div id="categories-list" class="space-y-3">
+              {categoriesData.map(cat => (
+                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200 hover:border-slate-300 transition-all hover:shadow-md">
+                  <div class="flex items-center gap-4 flex-1">
+                    <div class="flex flex-col flex-1">
+                      <span class="font-semibold text-slate-900">{cat.name}</span>
+                      <span class="text-sm text-slate-500">Slug: {cat.slug}</span>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={!cat.isHidden}
+                        class="sr-only peer toggle-category"
+                        data-id={cat.id}
+                        data-slug={cat.slug}
+                        data-type="categories"
+                      />
+                      <div class="w-14 h-7 bg-red-500 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-500 shadow-inner"></div>
+                      <span class="ms-3 text-sm font-medium" data-hidden={cat.isHidden}>
+                        {cat.isHidden ? '❌ Ẩn' : '✅ Hiển thị'}
+                      </span>
+                    </label>
+                    <a
+                      href={`/loivao/#/collections/categories/entries/${cat.slug}`}
+                      class="px-4 py-2 text-sm bg-slate-200 hover:bg-slate-300 rounded-lg transition-colors"
+                      target="_blank"
+                    >
+                      Chỉnh sửa
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Products Section -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200">
+          <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4">
+            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+              </svg>
+              Sản Phẩm ({productsData.length})
+            </h2>
+          </div>
+          <div class="p-6">
+            <div class="mb-4 flex gap-2 flex-wrap">
+              <button class="filter-btn px-4 py-2 bg-slate-200 hover:bg-slate-300 rounded-lg text-sm transition-colors" data-filter="all">
+                Tất cả
+              </button>
+              <button class="filter-btn px-4 py-2 bg-slate-200 hover:bg-slate-300 rounded-lg text-sm transition-colors" data-filter="xe-tai">
+                Xe Tải
+              </button>
+              <button class="filter-btn px-4 py-2 bg-slate-200 hover:bg-slate-300 rounded-lg text-sm transition-colors" data-filter="xe-cau">
+                Xe Cẩu
+              </button>
+              <button class="filter-btn px-4 py-2 bg-slate-200 hover:bg-slate-300 rounded-lg text-sm transition-colors" data-filter="mooc">
+                Mooc
+              </button>
+              <button class="filter-btn px-4 py-2 bg-slate-200 hover:bg-slate-300 rounded-lg text-sm transition-colors" data-filter="dau-keo">
+                Đầu Kéo
+              </button>
+            </div>
+            <div id="products-list" class="space-y-3 max-h-[600px] overflow-y-auto pr-2">
+              {productsData.map(prod => (
+                <div class="product-item flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200 hover:border-slate-300 transition-all hover:shadow-md" data-type={prod.type}>
+                  <div class="flex items-center gap-4 flex-1">
+                    <div class="flex flex-col flex-1">
+                      <div class="flex items-center gap-2">
+                        <span class="font-semibold text-slate-900">{prod.name}</span>
+                        {prod.isNew && <span class="px-2 py-0.5 bg-blue-500 text-white text-xs rounded-full">MỚI</span>}
+                        {prod.isHot && <span class="px-2 py-0.5 bg-red-500 text-white text-xs rounded-full">HOT</span>}
+                      </div>
+                      <span class="text-sm text-slate-500">{prod.brand} • {prod.type}</span>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={!prod.isHidden}
+                        class="sr-only peer toggle-product"
+                        data-id={prod.id}
+                        data-slug={prod.slug}
+                        data-type="products"
+                      />
+                      <div class="w-14 h-7 bg-red-500 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-500 shadow-inner"></div>
+                      <span class="ms-3 text-sm font-medium" data-hidden={prod.isHidden}>
+                        {prod.isHidden ? '❌ Ẩn' : '✅ Hiển thị'}
+                      </span>
+                    </label>
+                    <a
+                      href={`/loivao/#/collections/products/entries/${prod.slug}`}
+                      class="px-4 py-2 text-sm bg-slate-200 hover:bg-slate-300 rounded-lg transition-colors"
+                      target="_blank"
+                    >
+                      Chỉnh sửa
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Blog Posts Section -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200">
+          <div class="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-4">
+            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+              </svg>
+              Bài Viết ({blogData.length})
+            </h2>
+          </div>
+          <div class="p-6">
+            <div id="blog-list" class="space-y-3 max-h-[600px] overflow-y-auto pr-2">
+              {blogData.map(post => (
+                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200 hover:border-slate-300 transition-all hover:shadow-md">
+                  <div class="flex items-center gap-4 flex-1">
+                    <div class="flex flex-col flex-1">
+                      <span class="font-semibold text-slate-900">{post.title}</span>
+                      <span class="text-sm text-slate-500">
+                        {post.category} • 👁 {post.views} • 💬 {post.comments}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={!post.isHidden}
+                        class="sr-only peer toggle-blog"
+                        data-id={post.id}
+                        data-slug={post.slug}
+                        data-type="blog"
+                      />
+                      <div class="w-14 h-7 bg-red-500 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-500 shadow-inner"></div>
+                      <span class="ms-3 text-sm font-medium" data-hidden={post.isHidden}>
+                        {post.isHidden ? '❌ Ẩn' : '✅ Hiển thị'}
+                      </span>
+                    </label>
+                    <a
+                      href={`/loivao/#/collections/blog/entries/${post.slug}`}
+                      class="px-4 py-2 text-sm bg-slate-200 hover:bg-slate-300 rounded-lg transition-colors"
+                      target="_blank"
+                    >
+                      Chỉnh sửa
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 p-6 bg-blue-50 border border-blue-200 rounded-xl">
+        <div class="flex items-start gap-3">
+          <svg class="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <div>
+            <h3 class="font-semibold text-blue-900 mb-2">Cách sử dụng Admin Dashboard</h3>
+            <ul class="text-sm text-blue-800 space-y-1 list-disc list-inside">
+              <li><strong>Toggle Ẩn/Hiển thị:</strong> Click vào nút toggle để thay đổi trạng thái ngay lập tức</li>
+              <li><strong>Lọc sản phẩm:</strong> Sử dụng các nút lọc để xem theo loại xe</li>
+              <li><strong>Chỉnh sửa chi tiết:</strong> Click "Chỉnh sửa" để mở CMS Editor và cập nhật thông tin đầy đủ</li>
+              <li><strong>Trạng thái real-time:</strong> Các thay đổi được lưu vào database và áp dụng ngay</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Product filter
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const productItems = document.querySelectorAll('.product-item');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+
+        filterButtons.forEach(b => b.classList.remove('bg-green-600', 'text-white'));
+        btn.classList.add('bg-green-600', 'text-white');
+
+        productItems.forEach(item => {
+          if (filter === 'all' || item.dataset.type === filter) {
+            item.classList.remove('hidden');
+          } else {
+            item.classList.add('hidden');
+          }
+        });
+      });
+    });
+
+    // Toggle change handler with API call
+    async function toggleVisibility(checkbox: HTMLInputElement) {
+      const contentType = checkbox.dataset.type as string;
+      const contentId = checkbox.dataset.id as string;
+      const contentSlug = checkbox.dataset.slug as string;
+      const isChecked = checkbox.checked;
+      const isHidden = !isChecked;
+
+      // Get content name
+      const container = checkbox.closest('.flex');
+      const nameElement = container?.querySelector('.font-semibold');
+      const contentName = nameElement?.textContent?.trim() || '';
+
+      try {
+        const response = await fetch('/api/toggle-visibility', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contentType,
+            contentId,
+            contentSlug,
+            contentName,
+            field: 'is_hidden',
+            value: isHidden
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update visibility');
+        }
+
+        // Update label text
+        const label = checkbox.parentElement?.querySelector('span[data-hidden]');
+        if (label) {
+          label.textContent = isHidden ? '❌ Ẩn' : '✅ Hiển thị';
+          label.setAttribute('data-hidden', String(isHidden));
+        }
+
+        // Show success notification
+        showNotification('✅ Đã cập nhật trạng thái thành công!', 'success');
+      } catch (error) {
+        console.error('Error:', error);
+        // Revert checkbox
+        checkbox.checked = !checkbox.checked;
+        showNotification('❌ Có lỗi xảy ra. Vui lòng thử lại!', 'error');
+      }
+    }
+
+    // Show notification
+    function showNotification(message: string, type: 'success' | 'error') {
+      const notification = document.createElement('div');
+      notification.className = `fixed top-4 right-4 px-6 py-4 rounded-lg shadow-lg text-white font-medium z-50 animate-slide-in ${
+        type === 'success' ? 'bg-green-600' : 'bg-red-600'
+      }`;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.classList.add('animate-fade-out');
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    // Add event listeners to all toggles
+    document.querySelectorAll('input[type="checkbox"][class*="toggle-"]').forEach(toggle => {
+      toggle.addEventListener('change', (e) => {
+        const checkbox = e.target as HTMLInputElement;
+        toggleVisibility(checkbox);
+      });
+    });
+
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slide-in {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      @keyframes fade-out {
+        to {
+          opacity: 0;
+        }
+      }
+      .animate-slide-in {
+        animation: slide-in 0.3s ease-out;
+      }
+      .animate-fade-out {
+        animation: fade-out 0.3s ease-out;
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</BaseLayout>
