@@ -85,7 +85,7 @@ export const categories: CategoryData[] = [
     "keywords": [
       "xe-lu, Xe Lu"
     ],
-    "isHidden": false,
+    "isHidden": true,
     "order": 5
   }
 ];

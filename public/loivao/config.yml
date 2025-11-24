@@ -5,6 +5,9 @@ backend:
   site_domain: "soosan24112025.netlify.app"
   base_url: "https://api.netlify.com"
 
+site_url: "https://soosan24112025.netlify.app"
+display_url: "https://soosan24112025.netlify.app"
+
 media_folder: "public/assets/uploads"
 public_folder: "/assets/uploads"
 
