@@ -76,17 +76,6 @@ export const categories: CategoryData[] = [
     ],
     "isHidden": false,
     "order": 4
-  },
-  {
-    "id": "xe-lu",
-    "name": "Xe Lu",
-    "slug": "xe-lu",
-    "description": "Xe Lu",
-    "keywords": [
-      "xe-lu, Xe Lu"
-    ],
-    "isHidden": true,
-    "order": 5
   }
 ];
 

@@ -23,14 +23,26 @@ collections:
     slug: "{{slug}}"
     extension: "json"
     format: "json"
+    summary: "{{name}} - {{#if isHidden}}[\u1ea8N]{{else}}[HI\u1ec2N TH\u1eca]{{/if}}"
+    sortable_fields: ['name', 'order', 'isHidden']
+    view_filters:
+      - label: "Hi\u1ec3n Th\u1ecb"
+        field: isHidden
+        pattern: false
+      - label: "\u0110\u00e3 \u1ea8n"
+        field: isHidden
+        pattern: true
+    view_groups:
+      - label: "Tr\u1ea1ng Th\u00e1i"
+        field: isHidden
     fields:
       - { label: "ID", name: "id", widget: "string", required: true }
       - { label: "T\u00ean Danh M\u1ee5c", name: "name", widget: "string", required: true }
       - { label: "Slug", name: "slug", widget: "string", required: true }
       - { label: "M\u00f4 T\u1ea3", name: "description", widget: "text", required: false }
       - { label: "T\u1eeb Kh\u00f3a", name: "keywords", widget: "list", required: false }
-      - { label: "\u1ea8n", name: "isHidden", widget: "boolean", default: false }
-      - { label: "Th\u1ee9 T\u1ef1", name: "order", widget: "number", required: false }
+      - { label: "\u1ea8n", name: "isHidden", widget: "boolean", default: false, hint: "B\u1eadt \u0111\u1ec3 \u1ea9n danh m\u1ee5c n\u00e0y kh\u1ecfi website" }
+      - { label: "Th\u1ee9 T\u1ef1", name: "order", widget: "number", required: false, hint: "S\u1ed1 th\u1ee9 t\u1ef1 s\u1eafp x\u1ebfp (c\u00e0ng nh\u1ecf c\u00e0ng l\u00ean \u0111\u1ea7u)" }
 
   # Products Collection
   - name: "products"
@@ -41,8 +53,8 @@ collections:
     slug: "{{id}}"
     extension: "json"
     format: "json"
-    summary: "{{name}} - {{brand}}"
-    sortable_fields: ['name', 'brand', 'type', 'price', 'weight']
+    summary: "{{name}} - {{brand}} {{#if isNew}}[\ud83c\udd95 M\u1edaI]{{/if}} {{#if isHot}}[\ud83d\udd25 HOT]{{/if}} {{#if isHidden}}[\u274c \u1ea8N]{{else}}[\u2705 HI\u1ec2N]{{/if}}"
+    sortable_fields: ['name', 'brand', 'type', 'price', 'weight', 'isNew', 'isHot', 'isHidden', 'order']
     view_filters:
       - label: "Lo\u1ea1i Xe"
         field: type
@@ -50,9 +62,25 @@ collections:
       - label: "H\u00e3ng Xe"
         field: brand
         pattern: ''
-      - label: "\u1ea8n"
+      - label: "\u0110ang Hi\u1ec3n Th\u1ecb"
+        field: isHidden
+        pattern: false
+      - label: "\u0110\u00e3 \u1ea8n"
         field: isHidden
         pattern: true
+      - label: "S\u1ea3n Ph\u1ea9m M\u1edbi"
+        field: isNew
+        pattern: true
+      - label: "S\u1ea3n Ph\u1ea9m N\u1ed5i B\u1eadt"
+        field: isHot
+        pattern: true
+    view_groups:
+      - label: "Lo\u1ea1i Xe"
+        field: type
+      - label: "H\u00e3ng"
+        field: brand
+      - label: "Tr\u1ea1ng Th\u00e1i Hi\u1ec3n Th\u1ecb"
+        field: isHidden
     fields:
       # Basic Information
       - { label: "ID", name: "id", widget: "string", required: true }
@@ -86,9 +114,9 @@ collections:
       - { label: "\u1ea2nh S\u1ea3n Ph\u1ea9m", name: "images", widget: "list", required: true }
 
       # Status Flags
-      - { label: "M\u1edbi", name: "isNew", widget: "boolean", default: false }
-      - { label: "N\u1ed5i B\u1eadt", name: "isHot", widget: "boolean", default: false }
-      - { label: "\u1ea8n", name: "isHidden", widget: "boolean", default: false }
+      - { label: "M\u1edbi", name: "isNew", widget: "boolean", default: false, hint: "Hi\u1ec3n th\u1ecb badge 'M\u1edbi' tr\u00ean s\u1ea3n ph\u1ea9m" }
+      - { label: "N\u1ed5i B\u1eadt", name: "isHot", widget: "boolean", default: false, hint: "Hi\u1ec3n th\u1ecb badge 'Hot' v\u00e0 xu\u1ea5t hi\u1ec7n \u1edf m\u1ee5c n\u1ed5i b\u1eadt" }
+      - { label: "\u1ea8n", name: "isHidden", widget: "boolean", default: false, hint: "B\u1eadt \u0111\u1ec3 \u1ea9n s\u1ea3n ph\u1ea9m kh\u1ecfi website" }
       - { label: "Xu\u1ea5t X\u1ee9", name: "origin", widget: "string", required: false }
 
       # Descriptions
@@ -115,15 +143,23 @@ collections:
     slug: "{{slug}}"
     extension: "md"
     format: "frontmatter"
-    summary: "{{title}} - {{category}}"
-    sortable_fields: ['title', 'publishDate', 'category']
+    summary: "{{title}} - {{category}} | \ud83d\udc41 {{views}} | \ud83d\udcac {{comments}} {{#if isHidden}}[\u274c \u1ea8N]{{else}}[\u2705 HI\u1ec2N]{{/if}}"
+    sortable_fields: ['title', 'publishDate', 'category', 'views', 'comments', 'isHidden', 'order']
     view_filters:
       - label: "Danh M\u1ee5c"
         field: category
         pattern: ''
-      - label: "\u1ea8n"
+      - label: "\u0110ang Hi\u1ec3n Th\u1ecb"
+        field: isHidden
+        pattern: false
+      - label: "\u0110\u00e3 \u1ea8n"
         field: isHidden
         pattern: true
+    view_groups:
+      - label: "Danh M\u1ee5c"
+        field: category
+      - label: "Tr\u1ea1ng Th\u00e1i"
+        field: isHidden
     fields:
       - { label: "ID", name: "id", widget: "string", required: true }
       - { label: "Ti\u00eau \u0110\u1ec1", name: "title", widget: "string", required: true }
@@ -146,8 +182,8 @@ collections:
       - { label: "Th\u1eddi Gian \u0110\u1ecdc (ph\u00fat)", name: "readTime", widget: "number", required: true }
       - { label: "T\u00e1c Gi\u1ea3", name: "author", widget: "string", required: true }
       - { label: "Tags", name: "tags", widget: "list", required: false }
-      - { label: "L\u01b0\u1ee3t Xem", name: "views", widget: "number", default: 0 }
-      - { label: "B\u00ecnh Lu\u1eadn", name: "comments", widget: "number", default: 0 }
-      - { label: "\u1ea8n", name: "isHidden", widget: "boolean", default: false }
+      - { label: "L\u01b0\u1ee3t Xem", name: "views", widget: "number", default: 0, hint: "S\u1ed1 l\u01b0\u1ee3t xem b\u00e0i vi\u1ebft" }
+      - { label: "B\u00ecnh Lu\u1eadn", name: "comments", widget: "number", default: 0, hint: "S\u1ed1 b\u00ecnh lu\u1eadn" }
+      - { label: "\u1ea8n", name: "isHidden", widget: "boolean", default: false, hint: "B\u1eadt \u0111\u1ec3 \u1ea9n b\u00e0i vi\u1ebft kh\u1ecfi website" }
       - { label: "N\u1ed9i Dung", name: "body", widget: "markdown", required: true }
-      - { label: "Th\u1ee9 T\u1ef1 S\u1eafp X\u1ebfp", name: "order", widget: "number", required: false }
+      - { label: "Th\u1ee9 T\u1ef1 S\u1eafp X\u1ebfp", name: "order", widget: "number", required: false, hint: "S\u1ed1 th\u1ee9 t\u1ef1 s\u1eafp x\u1ebfp (c\u00e0ng nh\u1ecf c\u00e0ng l\u00ean \u0111\u1ea7u)" }
