@@ -99,8 +99,7 @@ collections:
       - { label: "M\u00f4-men Xo\u1eafn", name: "engineTorque", widget: "string", required: false }
       - { label: "Ti\u00eau Chu\u1ea9n Kh\u00ed Th\u1ea3i", name: "emissionStandard", widget: "string", required: false }
 
-      # Additional Specs (JSON format for flexibility)
-      - { label: "Th\u00f4ng S\u1ed1 Kh\u00e1c", name: "specifications", widget: "object", required: false }
+      # Note: specifications field removed from CMS (Sveltia limitation with object widget)
       - { label: "Th\u1ee9 T\u1ef1 S\u1eafp X\u1ebfp", name: "order", widget: "number", required: false }
 
   # Blog Posts Collection
