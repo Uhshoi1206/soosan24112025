@@ -3,10 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Layout from '../components/Layout.tsx';
 import CatalogHeader from '../components/catalog/CatalogHeader.tsx';
 import CatalogPage from '../components/catalog/CatalogPage.tsx';
-import { trucks } from '../data/products';
-import { filterVisibleTrucks } from '../config/categoryVisibility';
+import { getVisibleProducts } from '../utils/contentCollections';
 
-const visibleTrucks = filterVisibleTrucks(trucks);
+const visibleTrucks = await getVisibleProducts();
 ---
 
 <BaseLayout

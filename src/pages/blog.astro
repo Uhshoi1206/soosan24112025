@@ -1,14 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Layout from '../components/Layout.tsx';
-import { getBlogData } from '../data/blog-posts';
+import { getVisibleBlogPosts } from '../utils/contentCollections';
 import { blogCategories } from '../data/blogData';
 import { OptimizedImage } from '../components/ui/optimized-image.tsx';
 
-const blogData = await getBlogData();
-const sortedPosts = [...blogData.allBlogPosts].sort((a, b) =>
-  new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
-);
+const sortedPosts = await getVisibleBlogPosts();
 ---
 
 <BaseLayout
@@ -25,10 +22,10 @@ const sortedPosts = [...blogData.allBlogPosts].sort((a, b) =>
             {sortedPosts.map((post) => (
               <article key={post.slug} class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition">
                 <a href={`/blog/${post.slug}`} class="block">
-                  {post.imageUrl && (
+                  {post.images && post.images[0] && (
                     <OptimizedImage
                       client:load
-                      src={post.imageUrl}
+                      src={post.images[0]}
                       alt={post.title}
                       className="w-full h-64 object-cover"
                       useCase="thumbnail"

@@ -1,15 +1,15 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Layout from '../../components/Layout.tsx';
-import { getBlogData } from '../../data/blog-posts';
+import { getVisibleBlogPosts } from '../../utils/contentCollections';
 import { blogCategories } from '../../data/blogData';
 import { OptimizedImage } from '../../components/ui/optimized-image.tsx';
 import TableOfContents from '../../components/blog/TableOfContents.tsx';
 import '../../components/blog/BlogStyles.css';
 
 export async function getStaticPaths() {
-  const blogData = await getBlogData();
-  return blogData.allBlogPosts.map((post) => ({
+  const allPosts = await getVisibleBlogPosts();
+  return allPosts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
   }));
@@ -18,8 +18,8 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const categoryLabel = blogCategories[post.category] || post.category;
 
-const blogData = await getBlogData();
-const relatedPosts = blogData.allBlogPosts
+const allPosts = await getVisibleBlogPosts();
+const relatedPosts = allPosts
   .filter(p => p.category === post.category && p.slug !== post.slug)
   .slice(0, 3);
 ---
@@ -53,10 +53,10 @@ const relatedPosts = blogData.allBlogPosts
 
           <p class="text-xl text-gray-600 mb-6">{post.description}</p>
 
-          {post.imageUrl && (
+          {post.images && post.images[0] && (
             <OptimizedImage
               client:load
-              src={post.imageUrl}
+              src={post.images[0]}
               alt={post.title}
               className="w-full rounded-lg mb-8"
               useCase="hero"

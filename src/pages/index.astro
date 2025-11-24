@@ -9,24 +9,21 @@ import BlogSection from '../components/home/BlogSection.tsx';
 import WeightCategories from '../components/home/WeightCategories.tsx';
 import TestimonialSection from '../components/home/TestimonialSection.tsx';
 
-import {
-  featuredTrucks,
-  specializedCranes,
-  semiTrailers,
-  tractors,
-  trucks
-} from '../data/products';
-import { getBlogData } from '../data/blog-posts';
+import { getOrganizedProducts, getLegacyBlogData, getVisibleCategories } from '../utils/contentCollections';
 import { blogCategories } from '../data/blogData';
-import { isTypeEnabled, getAllCategories } from '../config/categoryVisibility';
 
-const blogData = await getBlogData();
-const sortedPosts = [...blogData.allBlogPosts].sort((a, b) =>
-  new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
-);
+const { featuredTrucks, specializedCranes, semiTrailers, tractors, trucks } = await getOrganizedProducts();
+const blogData = await getLegacyBlogData();
+const sortedPosts = blogData.allBlogPosts;
 
+const allCategories = await getVisibleCategories();
 const baseKeys = new Set(['xe-tai', 'xe-cau', 'mooc', 'dau-keo']);
-const extraCategories = getAllCategories().filter(cat => cat.enabled && !baseKeys.has(cat.key));
+const extraCategories = allCategories.filter(cat => !baseKeys.has(cat.data.id));
+
+// Helper to check if type is enabled
+const isTypeEnabled = (type: string) => {
+  return allCategories.some(cat => cat.data.id === type);
+};
 ---
 
 <BaseLayout

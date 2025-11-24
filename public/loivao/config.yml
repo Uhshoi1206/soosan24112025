@@ -1,0 +1,150 @@
+backend:
+  name: github
+  repo: your-username/your-repo-name
+  branch: main
+  site_domain: ""
+  base_url: ""
+
+media_folder: "public/assets/uploads"
+public_folder: "/assets/uploads"
+
+locale: "vi"
+
+collections:
+  # Categories Collection
+  - name: "categories"
+    label: "Danh M\u1ee5c"
+    label_singular: "Danh M\u1ee5c"
+    folder: "src/content/categories"
+    create: true
+    slug: "{{slug}}"
+    extension: "json"
+    format: "json"
+    fields:
+      - { label: "ID", name: "id", widget: "string", required: true }
+      - { label: "T\u00ean Danh M\u1ee5c", name: "name", widget: "string", required: true }
+      - { label: "Slug", name: "slug", widget: "string", required: true }
+      - { label: "M\u00f4 T\u1ea3", name: "description", widget: "text", required: false }
+      - { label: "T\u1eeb Kh\u00f3a", name: "keywords", widget: "list", required: false }
+      - { label: "\u1ea8n", name: "isHidden", widget: "boolean", default: false }
+      - { label: "Th\u1ee9 T\u1ef1", name: "order", widget: "number", required: false }
+
+  # Products Collection
+  - name: "products"
+    label: "S\u1ea3n Ph\u1ea9m"
+    label_singular: "S\u1ea3n Ph\u1ea9m"
+    folder: "src/content/products"
+    create: true
+    slug: "{{id}}"
+    extension: "json"
+    format: "json"
+    summary: "{{name}} - {{brand}}"
+    sortable_fields: ['name', 'brand', 'type', 'price', 'weight']
+    view_filters:
+      - label: "Lo\u1ea1i Xe"
+        field: type
+        pattern: ''
+      - label: "H\u00e3ng Xe"
+        field: brand
+        pattern: ''
+      - label: "\u1ea8n"
+        field: isHidden
+        pattern: true
+    fields:
+      # Basic Information
+      - { label: "ID", name: "id", widget: "string", required: true }
+      - { label: "T\u00ean S\u1ea3n Ph\u1ea9m", name: "name", widget: "string", required: true }
+      - { label: "Slug", name: "slug", widget: "string", required: true }
+      - { label: "H\u00e3ng", name: "brand", widget: "string", required: true }
+      - label: "Lo\u1ea1i Xe"
+        name: "type"
+        widget: "select"
+        options:
+          - { label: "Xe T\u1ea3i", value: "xe-tai" }
+          - { label: "Xe C\u1ea9u", value: "xe-cau" }
+          - { label: "S\u01a1 Mi R\u01a1 Mooc", value: "mooc" }
+          - { label: "Xe \u0110\u1ea7u K\u00e9o", value: "dau-keo" }
+
+      # Pricing
+      - { label: "Gi\u00e1 (VN\u0110)", name: "price", widget: "number", required: false }
+      - { label: "Gi\u00e1 Hi\u1ec3n Th\u1ecb", name: "priceText", widget: "string", required: false }
+
+      # Dimensions & Weight
+      - { label: "Tr\u1ecdng T\u1ea3i Hi\u1ec3n Th\u1ecb", name: "weightText", widget: "string", required: true }
+      - { label: "Tr\u1ecdng T\u1ea3i (t\u1ea5n)", name: "weight", widget: "number", required: true }
+      - { label: "D\u00e0i (m)", name: "length", widget: "number", required: true }
+      - { label: "R\u1ed9ng (m)", name: "width", widget: "number", required: true }
+      - { label: "Cao (m)", name: "height", widget: "number", required: true }
+      - { label: "K\u00edch Th\u01b0\u1edbc", name: "dimensions", widget: "string", required: true }
+
+      # Images
+      - { label: "\u1ea2nh \u0110\u1ea1i Di\u1ec7n", name: "thumbnailUrl", widget: "string", required: true }
+      - { label: "\u1ea2nh S\u1ea3n Ph\u1ea9m", name: "images", widget: "list", required: true }
+
+      # Status Flags
+      - { label: "M\u1edbi", name: "isNew", widget: "boolean", default: false }
+      - { label: "N\u1ed5i B\u1eadt", name: "isHot", widget: "boolean", default: false }
+      - { label: "\u1ea8n", name: "isHidden", widget: "boolean", default: false }
+      - { label: "Xu\u1ea5t X\u1ee9", name: "origin", widget: "string", required: false }
+
+      # Descriptions
+      - { label: "M\u00f4 T\u1ea3 Ng\u1eafn", name: "description", widget: "text", required: false }
+      - { label: "M\u00f4 T\u1ea3 Chi Ti\u1ebft", name: "detailedDescription", widget: "markdown", required: false }
+      - { label: "T\u00ednh N\u0103ng", name: "features", widget: "list", required: false }
+
+      # Engine Specifications
+      - { label: "Model \u0110\u1ed9ng C\u01a1", name: "engineModel", widget: "string", required: false }
+      - { label: "Dung T\u00edch \u0110\u1ed9ng C\u01a1", name: "engineCapacity", widget: "string", required: false }
+      - { label: "C\u00f4ng Su\u1ea5t \u0110\u1ed9ng C\u01a1", name: "enginePower", widget: "string", required: false }
+      - { label: "M\u00f4-men Xo\u1eafn", name: "engineTorque", widget: "string", required: false }
+      - { label: "Ti\u00eau Chu\u1ea9n Kh\u00ed Th\u1ea3i", name: "emissionStandard", widget: "string", required: false }
+
+      # Additional Specs (JSON format for flexibility)
+      - { label: "Th\u00f4ng S\u1ed1 Kh\u00e1c", name: "specifications", widget: "object", required: false }
+      - { label: "Th\u1ee9 T\u1ef1 S\u1eafp X\u1ebfp", name: "order", widget: "number", required: false }
+
+  # Blog Posts Collection
+  - name: "blog"
+    label: "B\u00e0i Vi\u1ebft"
+    label_singular: "B\u00e0i Vi\u1ebft"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    summary: "{{title}} - {{category}}"
+    sortable_fields: ['title', 'publishDate', 'category']
+    view_filters:
+      - label: "Danh M\u1ee5c"
+        field: category
+        pattern: ''
+      - label: "\u1ea8n"
+        field: isHidden
+        pattern: true
+    fields:
+      - { label: "ID", name: "id", widget: "string", required: true }
+      - { label: "Ti\u00eau \u0110\u1ec1", name: "title", widget: "string", required: true }
+      - { label: "Slug", name: "slug", widget: "string", required: true }
+      - { label: "M\u00f4 T\u1ea3", name: "description", widget: "text", required: true }
+
+      - label: "Danh M\u1ee5c"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Tin T\u1ee9c Ng\u00e0nh V\u1eadn T\u1ea3i", value: "industry-news" }
+          - { label: "\u0110\u00e1nh Gi\u00e1 Xe", value: "product-review" }
+          - { label: "Kinh Nghi\u1ec7m L\u00e1i Xe", value: "driver-tips" }
+          - { label: "B\u1ea3o D\u01b0\u1ee1ng", value: "maintenance" }
+          - { label: "T\u01b0 V\u1ea5n Mua Xe", value: "buying-guide" }
+          - { label: "C\u00f4ng Ngh\u1ec7 & \u0110\u1ed5i M\u1edbi", value: "technology" }
+
+      - { label: "\u1ea2nh", name: "images", widget: "list", required: true }
+      - { label: "Ng\u00e0y \u0110\u0103ng (timestamp)", name: "publishDate", widget: "number", required: true }
+      - { label: "Th\u1eddi Gian \u0110\u1ecdc (ph\u00fat)", name: "readTime", widget: "number", required: true }
+      - { label: "T\u00e1c Gi\u1ea3", name: "author", widget: "string", required: true }
+      - { label: "Tags", name: "tags", widget: "list", required: false }
+      - { label: "L\u01b0\u1ee3t Xem", name: "views", widget: "number", default: 0 }
+      - { label: "B\u00ecnh Lu\u1eadn", name: "comments", widget: "number", default: 0 }
+      - { label: "\u1ea8n", name: "isHidden", widget: "boolean", default: false }
+      - { label: "N\u1ed9i Dung", name: "body", widget: "markdown", required: true }
+      - { label: "Th\u1ee9 T\u1ef1 S\u1eafp X\u1ebfp", name: "order", widget: "number", required: false }
