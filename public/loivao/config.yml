@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: your-username/your-repo-name
+  repo: Uhshoi1206/soosan24112025
   branch: main
   site_domain: ""
   base_url: ""
