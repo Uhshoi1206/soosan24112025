@@ -5,7 +5,8 @@
  * This file uses astro:content which is server-only
  */
 
-import type { CategoryKey, CategoryConfig } from './categoryVisibility';
+import type { VehicleType } from '@/models/TruckTypes';
+import type { CategoryData } from '@/data/generated/categories';
 import {
   getVisibleCategories,
   getAllCategories as getAllCategoriesFromContent,
@@ -13,7 +14,10 @@ import {
   isTypeEnabled as isTypeEnabledFromContent,
   filterVisibleTrucks as filterVisibleTrucksFromContent,
 } from '@/utils/contentCollections';
-import type { Truck, VehicleType } from '@/models/TruckTypes';
+import type { Truck } from '@/models/TruckTypes';
+
+export type CategoryKey = VehicleType;
+export type CategoryConfig = CategoryData;
 
 /**
  * Load all visible categories
@@ -22,12 +26,12 @@ export async function loadCategories(): Promise<CategoryConfig[]> {
   const entries = await getVisibleCategories();
 
   return entries.map(entry => ({
-    key: entry.data.id as CategoryKey,
+    id: entry.data.id as CategoryKey,
     name: entry.data.name,
     slug: entry.data.slug || entry.data.id,
-    enabled: !entry.data.isHidden,
+    isHidden: entry.data.isHidden,
     keywords: entry.data.keywords || [entry.data.name.toLowerCase()],
-    description: entry.data.description,
+    description: entry.data.description || '',
     order: entry.data.order || 999,
   }));
 }
@@ -40,12 +44,12 @@ export async function getCategoryByKey(key: CategoryKey): Promise<CategoryConfig
   if (!entry) return undefined;
 
   return {
-    key: entry.data.id as CategoryKey,
+    id: entry.data.id as CategoryKey,
     name: entry.data.name,
     slug: entry.data.slug || entry.data.id,
-    enabled: !entry.data.isHidden,
+    isHidden: entry.data.isHidden,
     keywords: entry.data.keywords || [entry.data.name.toLowerCase()],
-    description: entry.data.description,
+    description: entry.data.description || '',
     order: entry.data.order || 999,
   };
 }
@@ -87,12 +91,12 @@ export async function isTypeEnabled(type: CategoryKey): Promise<boolean> {
 export async function getAllCategories(): Promise<CategoryConfig[]> {
   const entries = await getAllCategoriesFromContent();
   return entries.map(entry => ({
-    key: entry.data.id as CategoryKey,
+    id: entry.data.id as CategoryKey,
     name: entry.data.name,
     slug: entry.data.slug || entry.data.id,
-    enabled: !entry.data.isHidden,
+    isHidden: entry.data.isHidden,
     keywords: entry.data.keywords || [entry.data.name.toLowerCase()],
-    description: entry.data.description,
+    description: entry.data.description || '',
     order: entry.data.order || 999,
   }));
 }
