@@ -2,8 +2,8 @@ backend:
   name: github
   repo: Uhshoi1206/soosan24112025
   branch: main
-  site_domain: ""
-  base_url: ""
+  site_domain: "soosan24112025.netlify.app"
+  base_url: "https://api.netlify.com"
 
 media_folder: "public/assets/uploads"
 public_folder: "/assets/uploads"
