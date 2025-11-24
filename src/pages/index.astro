@@ -79,15 +79,15 @@ const isTypeEnabled = (type: string) => {
       )}
 
       {extraCategories.map(cat => (
-        isTypeEnabled(cat.key) && (
+        isTypeEnabled(cat.data.id) && (
           <VehicleCarousel
             client:visible
-            key={cat.key}
-            vehicles={trucks.filter(t => t.type === cat.key)}
-            title={cat.name}
-            description={`Các dòng ${cat.name.toLowerCase()} chuyên dụng, đa dạng mẫu mã`}
-            viewAllUrl={`/danh-muc-xe?type=${cat.key}`}
-            viewAllText={`Xem tất cả ${cat.name.toLowerCase()}`}
+            key={cat.data.id}
+            vehicles={trucks.filter(t => t.type === cat.data.id)}
+            title={cat.data.name}
+            description={cat.data.description || `Các dòng ${cat.data.name.toLowerCase()} chuyên dụng, đa dạng mẫu mã`}
+            viewAllUrl={`/danh-muc-xe?type=${cat.data.id}`}
+            viewAllText={`Xem tất cả ${cat.data.name.toLowerCase()}`}
           />
         )
       ))}
