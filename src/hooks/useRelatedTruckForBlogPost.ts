@@ -1,7 +1,7 @@
 import { BlogPost } from '@/models/BlogPost';
 import { trucks } from '@/data/truckData';
 import { Truck } from '@/models/TruckTypes';
-import { filterVisibleTrucks, getEnabledTypes, getTypeKeywords } from '@/config/categoryVisibility';
+import { filterVisibleTrucks, getEnabledTypes, getTypeKeywords } from '@/data/generated/categories';
 
 /**
  * Hook để tìm sản phẩm liên quan đến bài viết blog

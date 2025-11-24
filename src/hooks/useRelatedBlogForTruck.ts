@@ -2,7 +2,7 @@
 import { BlogPost } from '@/models/BlogPost';
 import { allBlogPosts } from '@/data/blog-posts';
 import { Truck } from '@/models/TruckTypes';
-import { getTypeKeywords } from '@/config/categoryVisibility';
+import { getTypeKeywords } from '@/data/generated/categories';
 
 /**
  * Hook để tìm bài viết liên quan đến sản phẩm xe

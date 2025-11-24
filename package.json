@@ -9,6 +9,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint .",
+    "cms:sync": "node scripts/sync-cms-categories.mjs && node scripts/generate-categories-data.mjs",
+    "prebuild": "npm run cms:sync",
     "dev:old": "vite",
     "build:old": "vite build"
   },

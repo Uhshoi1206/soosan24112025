@@ -5,7 +5,7 @@ import AddressRegions from './AddressRegions';
 import { addressRegions } from '@/data/addressData';
 import { useToast } from './ui/use-toast';
 import { submitToGoogleSheets, ContactData } from '@/services/googleSheetsService';
-import { getEnabledTypes, getCategoryName } from '@/config/categoryVisibility';
+import { getEnabledTypes, getCategoryName } from '@/data/generated/categories';
 
 const Footer: React.FC = () => {
   const { toast } = useToast();

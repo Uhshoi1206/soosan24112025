@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Layout from '../../components/Layout.tsx';
 import { OptimizedImage } from '../../components/ui/optimized-image.tsx';
 import { trucks } from '../../data/products';
-import { getCategoryName } from '../../config/categoryVisibility';
+import { getCategoryName } from '../../config/categoryHelpers';
 import ProductDetailTabs from '../../components/TruckDetail/ProductDetailTabs.tsx';
 import TruckItem from '../../components/TruckItem.tsx';
 import TruckActions from '../../components/TruckDetail/TruckActions.tsx';
@@ -25,7 +25,7 @@ const relatedTrucks = trucks
   )
   .slice(0, 4);
 
-const categoryName = getCategoryName(truck.type);
+const categoryName = await getCategoryName(truck.type);
 ---
 
 <BaseLayout

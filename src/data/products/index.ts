@@ -3,7 +3,7 @@ import { xeTaiProducts } from './xe-tai';
 import { xeCauProducts } from './xe-cau';
 import { moocProducts } from './mooc';
 import { dauKeoProducts } from './dau-keo';
-import { getAllCategories } from '@/config/categoryVisibility';
+import { getAllCategories } from '@/data/generated/categories';
 
 // Tự động nạp sản phẩm từ các thư mục con nếu có (cho danh mục mới)
 const modules = import.meta.glob('./*/index.ts', { eager: true }) as Record<string, any>;
@@ -76,21 +76,21 @@ for (const t of discoveredProducts) {
 }
 
 getAllCategories().forEach(cat => {
-  if (baseKeys.has(cat.key)) return;
+  if (baseKeys.has(cat.id)) return;
 
-  const typeProducts = byType[cat.key] || [];
+  const typeProducts = byType[cat.id] || [];
   if (typeProducts.length > 0) {
     dynamicExtraProducts.push(...typeProducts);
   } else {
     // Fallback: thử đọc qua index.ts của danh mục nếu có
-    const path = `./${cat.key}/index.ts`;
+    const path = `./${cat.id}/index.ts`;
     const mod = modules[path];
     if (mod) {
       const arr = extractProductsFromModule(mod);
       if (arr.length > 0) dynamicExtraProducts.push(...arr);
-      else dynamicExtraProducts.push(createPlaceholderProductFor(cat.key, cat.name));
+      else dynamicExtraProducts.push(createPlaceholderProductFor(cat.id, cat.name));
     } else {
-      dynamicExtraProducts.push(createPlaceholderProductFor(cat.key, cat.name));
+      dynamicExtraProducts.push(createPlaceholderProductFor(cat.id, cat.name));
     }
   }
 });
